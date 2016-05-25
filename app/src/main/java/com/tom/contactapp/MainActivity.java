@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +14,20 @@ import android.util.Log;
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CONTACTS = 1;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode==REQUEST_CONTACTS){
+            if (grantResults.length>0 &&
+                    grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                readContacts();
+            }else{
+
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +44,6 @@ public class MainActivity extends AppCompatActivity {
         }else{
             readContacts();
         }
-
-
         /*
         while(c.moveToNext()){
             int index = c.getColumnIndex(ContactsContract.Contacts._ID);
@@ -39,14 +52,12 @@ public class MainActivity extends AppCompatActivity {
             Log.d("Phone", id+"/"+name);
 
         }*/
-
     }
 
     private void readContacts() {
+        Log.d("Contacts", "readContacts");
         ContentResolver cr = getContentResolver();
         Cursor c = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-
-
 
     }
 }
