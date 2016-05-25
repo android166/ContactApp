@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -54,22 +55,34 @@ public class MainActivity extends AppCompatActivity {
         Log.d("Contacts", "readContacts");
         ContentResolver cr = getContentResolver();
         Cursor c = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-        String[] from = {ContactsContract.Contacts.DISPLAY_NAME};
+        /*String[] from = {ContactsContract.Contacts.DISPLAY_NAME};
         int[] to = {android.R.id.text1};
         SimpleCursorAdapter adapter =
                 new SimpleCursorAdapter(this,
                         android.R.layout.simple_list_item_1,
                         c, from, to , 0);
+        list.setAdapter(adapter);*/
 
-
-        list.setAdapter(adapter);
-        /*
         while(c.moveToNext()) {
             int index = c.getColumnIndex(ContactsContract.Contacts._ID);
             int id = c.getInt(index);
             String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-            Log.d("Phone", id + "/" + name);
-        }*/
+            int hasPhone = c.getInt(c.getColumnIndex(
+                    ContactsContract.Contacts.HAS_PHONE_NUMBER));
+            Log.d("Phone", id + "/" + name + "/"+ hasPhone);
+            if (hasPhone==1){
+                Cursor c2 = cr.query(Phone.CONTENT_URI,
+                        null,
+                        Phone.CONTACT_ID+"=?",
+                        new String[]{id+""},
+                        null);
+                while(c2.moveToNext()){
+                    String phone = c2.getString(c2.getColumnIndex(Phone.NUMBER));
+                    Log.d("NUMBER", phone);
+                }
+            }
+
+        }
     }
 }
 
