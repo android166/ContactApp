@@ -54,15 +54,20 @@ public class MainActivity extends AppCompatActivity {
     private void readContacts() {
         Log.d("Contacts", "readContacts");
         ContentResolver cr = getContentResolver();
-        Cursor c = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-        /*String[] from = {ContactsContract.Contacts.DISPLAY_NAME};
-        int[] to = {android.R.id.text1};
+        Cursor c = cr.query(Phone.CONTENT_URI,
+                new String[]{ContactsContract.Contacts.DISPLAY_NAME,
+                        Phone.NUMBER, ContactsContract.Contacts._ID},
+                null, null, null);
+
+        String[] from = {ContactsContract.Contacts.DISPLAY_NAME,
+                        Phone.NUMBER};
+        int[] to = {android.R.id.text1, android.R.id.text2};
         SimpleCursorAdapter adapter =
                 new SimpleCursorAdapter(this,
-                        android.R.layout.simple_list_item_1,
+                        android.R.layout.simple_list_item_2,
                         c, from, to , 0);
-        list.setAdapter(adapter);*/
-
+        list.setAdapter(adapter);
+        /*
         while(c.moveToNext()) {
             int index = c.getColumnIndex(ContactsContract.Contacts._ID);
             int id = c.getInt(index);
@@ -80,9 +85,8 @@ public class MainActivity extends AppCompatActivity {
                     String phone = c2.getString(c2.getColumnIndex(Phone.NUMBER));
                     Log.d("NUMBER", phone);
                 }
-            }
+            }*/
 
-        }
     }
 }
 
